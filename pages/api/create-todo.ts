@@ -9,17 +9,18 @@ export default async function createTodo(
   try {
     const dcoded: any = jwt.decode(req.body.token);
 
+    console.log(req.body.token);
+    console.log(dcoded);
+
     const response = await todo.create({
       todo: req.body.todo,
-      username: `${dcoded.username}`,
+      userid: `${dcoded.id}`,
     });
 
+    res.json(response);
     console.log(response);
-
-    res.send("created todo success fully");
   } catch (err) {
     console.log(err);
-    res.statusCode = 500;
     res.json({ error: "Todo already exists" });
   }
 }

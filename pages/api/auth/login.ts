@@ -7,18 +7,18 @@ export default async function register(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { username, password } = JSON.parse(req.body);
+  const { username, password } = req.body;
+
+  console.log(req.body);
 
   if (!username || !password) {
-    res.statusCode = 500;
     res.json({ error: "Fill all the field" });
     return;
   }
 
-  const user: any = await userModel.find({ username });
+  const user: any = await userModel.find({ name: username });
 
   if (user.length === 0) {
-    res.statusCode = 500;
     res.json({ error: "User not found" });
     return;
   }
@@ -30,11 +30,12 @@ export default async function register(
   }
 
   try {
-    const token = jwt.sign({ username }, `${process.env.MONGO_URI}`);
+    const token = jwt.sign({ id: user._id }, `${process.env.SECRET_KEY}`);
 
     res.json({ token });
   } catch (err) {
     if (err) {
+      console.log(err);
       res.json({ error: "Something went wrong" });
     }
   }

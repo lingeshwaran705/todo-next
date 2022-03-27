@@ -1,6 +1,6 @@
 import type { GetServerSideProps, GetStaticProps, NextPage } from "next";
 import Display from "../components/DisplayTodo";
-import Form from "../components/Form";
+import CreateTodo from "../components/CreateTodo";
 import mongoose from "mongoose";
 import axios from "axios";
 
@@ -11,7 +11,7 @@ const Home: NextPage = () => {
         <h1 className="text-center text-3xl sm:text-6xl font-roboto-slab py-6">
           Todo
         </h1>
-        <Form />
+        <CreateTodo />
         <Display />
       </section>
     </div>

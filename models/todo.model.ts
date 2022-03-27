@@ -1,16 +1,20 @@
+import mongoose from "mongoose";
 import { model, models, Schema } from "mongoose";
 
 type createType = {
   todo: string;
-  username: string;
+  userid: any;
 };
 
 const createSchema = new Schema<createType>(
   {
     todo: { type: String, required: true, unique: true, trim: true },
-    username: { type: String, required: true, unique: true },
+    userid: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+    },
   },
-  { timestamps: true, collection: "Todos" }
+  { collection: "Todos" }
 );
 
 export const todo = models.todos || model<createType>("todos", createSchema);

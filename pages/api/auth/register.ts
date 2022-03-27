@@ -7,32 +7,32 @@ export default async function register(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { username, password } = JSON.parse(req.body);
-
-  console.log(username);
-
-  if (!username || !password) {
+  const { username, password, email } = req.body;
+  console.log(req.body);
+  if (!username || !password || !email) {
     res.statusCode = 500;
     res.json({ error: "Fill all the field" });
     return;
   }
 
   try {
-    const token = jwt.sign({ username }, `${process.env.MONGO_URI}`);
-
     const hashedPass = await bcrypt.hash(password, 10);
 
     const user = await userModel.create({
-      username,
+      name: username,
+      email: email,
       password: hashedPass,
-      date: new Date(),
     });
 
-    const d = new Date();
+    const token = jwt.sign({ id: user._id }, `${process.env.MONGO_URI}`);
+
+    console.log(user);
+
     res.json({ token });
   } catch (err) {
     if (err) {
-      res.json({ error: "Username already exists" });
+      console.log(err);
+      res.json({ error: "User already exists" });
     }
   }
 }
