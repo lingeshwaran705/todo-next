@@ -7,7 +7,7 @@ export default async function register(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { username, password } = req.body;
+  const { username, password } = JSON.parse(req.body);
 
   console.log(req.body);
 

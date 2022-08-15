@@ -2,7 +2,6 @@ import type { GetServerSideProps, GetStaticProps, NextPage } from "next";
 import Display from "../components/DisplayTodo";
 import CreateTodo from "../components/CreateTodo";
 import mongoose from "mongoose";
-import axios from "axios";
 
 const Home: NextPage = () => {
   return (

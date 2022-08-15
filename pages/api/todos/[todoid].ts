@@ -4,7 +4,7 @@ import { todo } from "../../../models/todo.model";
 export default async function Todo(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "PUT") {
     const { todoid } = req.query;
-    const { updatedTodo } = req.body;
+    const { updatedTodo } = JSON.parse(req.body);
 
     try {
       await todo.findByIdAndUpdate(todoid, {

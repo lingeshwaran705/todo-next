@@ -7,13 +7,11 @@ export default async function createTodo(
   res: NextApiResponse
 ) {
   try {
-    const dcoded: any = jwt.decode(req.body.token);
-
-    console.log(req.body.token);
-    console.log(dcoded);
+    const data = JSON.parse(req.body);
+    const dcoded: any = jwt.decode(data.token);
 
     const response = await todo.create({
-      todo: req.body.todo,
+      todo: data.todo,
       userid: `${dcoded.id}`,
     });
 

@@ -2,7 +2,6 @@ import { GetServerSideProps } from "next";
 import React, { useEffect, useState } from "react";
 import mongoose from "mongoose";
 import { useRouter } from "next/router";
-import axios from "axios";
 import { IconButton } from "@mui/material";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -91,16 +90,21 @@ export default function Register() {
 
     if (validateEmail(formValue.email)) {
       setLoading(true);
-      const response: any = await axios.post("/api/auth/register", formValue);
+      const response: any = await fetch("/api/auth/register", {
+        method: "POST",
+        body: JSON.stringify(formValue),
+      });
+
+      const data = await response.json();
 
       setLoading(false);
 
-      if (response.data.error) {
-        setError(response.data.error);
+      if (data.error) {
+        setError(data.error);
       } else {
         setMsg("Redirecting...");
         router.push("/");
-        window.localStorage.setItem("token", response.data.token);
+        window.localStorage.setItem("token", data.token);
       }
     }
   }

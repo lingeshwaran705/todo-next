@@ -3,7 +3,6 @@ import Input from "./Input";
 import { useAppDispatch } from "./DisplayTodo";
 import { setTodo } from "../src/features/todoSlice";
 import { useRouter } from "next/router";
-import axios from "axios";
 import Error from "./Error";
 
 export default function Form() {
@@ -41,21 +40,26 @@ export default function Form() {
 
     setLoading(true);
 
-    const response = await axios.post("/api/create-todo", {
-      todo: value,
-      token: token,
+    const response = await fetch("/api/create-todo", {
+      method: "POST",
+      body: JSON.stringify({
+        todo: value,
+        token: token,
+      }),
     });
+
+    const data = await response.json();
 
     setLoading(false);
 
-    if (response.data.error) {
-      setError(response.data.error);
+    if (data.error) {
+      setError(data.error);
     } else {
       setError("");
 
-      console.log(response.data);
+      console.log(data);
 
-      dispatch(setTodo({ todo: value, _id: response.data._id }));
+      dispatch(setTodo({ todo: value, _id: data._id }));
     }
 
     console.log(response);

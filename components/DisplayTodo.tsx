@@ -3,7 +3,6 @@ import type { RootState, AppDispatch } from "../src/store";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
 import { IconButton } from "@mui/material";
-import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import { setMultipleTodos } from "../src/features/todoSlice";
 import CheckIcon from "@mui/icons-material/Check";
@@ -22,8 +21,9 @@ export default function Display() {
 
   useEffect(() => {
     (async () => {
-      const response = await axios.get("/api/todos");
-      dispatch(setMultipleTodos(response.data));
+      const response = await fetch("/api/todos");
+      const data = await response.json();
+      dispatch(setMultipleTodos(data));
     })();
   }, []);
 
@@ -40,7 +40,7 @@ export default function Display() {
 
     dispatch(setMultipleTodos(updatedTodo));
 
-    const response = await axios.delete(`/api/todos/${id}`);
+    const response = await fetch(`/api/todos/${id}`, { method: "DELETE" });
 
     console.log(response);
   };
@@ -69,9 +69,12 @@ export default function Display() {
     dispatch(setMultipleTodos(updated));
 
     setUpdatedTodo("");
-    const response = await axios.put(`/api/todos/${id}`, {
-      updatedTodo,
-      todo,
+    const response = await fetch(`/api/todos/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        updatedTodo,
+        todo,
+      }),
     });
     console.log(response);
   };
